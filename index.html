@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Testimonial card component showcase." />
+    <title>Testimonial Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <main class="page">
+
+      <div class="grid">
+
+        <!-- Card 1: Dark compact -->
+        <article class="card card--dark card--compact">
+          <blockquote>
+            <p>I have been solving all the project ideas on roadmap.sh and I am surprised how far I have come from where I started.</p>
+            <p class="card__highlight">Highly recommended!</p>
+          </blockquote>
+          <footer class="card__author">
+            <img src="https://i.pravatar.cc/80?img=11" alt="" class="avatar" />
+            <div>
+              <cite class="card__name">Artem Jones</cite>
+              <p class="card__role">Junior Frontend Developer</p>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Card 2: Light compact -->
+        <article class="card card--light card--compact">
+          <blockquote>
+            <p>Since starting my career in 2021, I have only followed one resource, roadmap.sh, it truly helped me go from 0 to having a job and changing the financial trajectory of my family</p>
+          </blockquote>
+          <footer class="card__author">
+            <img src="https://i.pravatar.cc/80?img=11" alt="" class="avatar" />
+            <div>
+              <cite class="card__name">Artem Jones</cite>
+              <p class="card__role">Junior Frontend Developer</p>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Card 3: Full photo -->
+        <article class="card card--photo" aria-label="Photo of Jackie Mackle">
+          <img
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=700&fit=crop&crop=faces"
+            alt="Jackie Mackle, Engineering Manager"
+            class="card__photo"
+          />
+        </article>
+
+        <!-- Card 4: Dark featured (stars + name + quote) -->
+        <article class="card card--dark card--featured">
+          <p class="card__stars" aria-label="5 out of 5 stars">★★★★★</p>
+          <cite class="card__name card__name--lg">Jackie Mackle</cite>
+          <p class="card__role card__role--muted">Engineering Manager</p>
+          <blockquote>
+            <p>I find myself recommending roadmap.sh to all the internees or junior developers. It's a great way to skill up and grow in your career.</p>
+          </blockquote>
+        </article>
+
+      </div>
+
+      <!-- Card 5: Carousel -->
+      <article class="card card--carousel">
+        <blockquote class="carousel__quote" id="carousel-quote">
+          <p></p>
+        </blockquote>
+        <div class="carousel__controls">
+          <button class="carousel__arrow" id="prev-btn" aria-label="Previous testimonial">&#8249;</button>
+          <div class="carousel__thumbs" id="thumbs"></div>
+          <button class="carousel__arrow" id="next-btn" aria-label="Next testimonial">&#8250;</button>
+        </div>
+        <p class="carousel__name" id="carousel-name"></p>
+      </article>
+
+    </main>
+
+    <script>
+      const testimonials = [
+        {
+          quote: "I started using roadmap.sh when I was just beginning my coding journey. It gave me a clear direction and helped me focus on what really matters for landing my first job.",
+          name: "Sarah Chen",
+          avatar: "https://i.pravatar.cc/80?img=25"
+        },
+        {
+          quote: "roadmap.sh is an incredible resource. I was fortunate to discover it during my university days in 2018. Back then, it was just a single repository with three images. It's amazing to see how much impact it has had on millions of lives since then.",
+          name: "Artem Jones",
+          avatar: "https://i.pravatar.cc/80?img=11"
+        },
+        {
+          quote: "The best part about roadmap.sh is that it's constantly updated with the latest industry standards. It's been my go-to learning guide throughout my entire career.",
+          name: "Mike Rodriguez",
+          avatar: "https://i.pravatar.cc/80?img=33"
+        }
+      ];
+
+      let current = 1;
+
+      const quoteEl = document.querySelector('#carousel-quote p');
+      const nameEl  = document.getElementById('carousel-name');
+      const thumbsEl = document.getElementById('thumbs');
+
+      function render() {
+        const t = testimonials[current];
+        quoteEl.textContent = t.quote;
+        nameEl.textContent  = t.name;
+
+        thumbsEl.innerHTML = testimonials.map((item, i) => `
+          <button
+            class="thumb${i === current ? ' thumb--active' : ''}"
+            data-index="${i}"
+            aria-label="View testimonial by ${item.name}${i === current ? ' (current)' : ''}"
+            aria-pressed="${i === current}"
+          >
+            <img src="${item.avatar}" alt="${item.name}" />
+          </button>
+        `).join('');
+
+        thumbsEl.querySelectorAll('.thumb').forEach(btn =>
+          btn.addEventListener('click', () => goTo(+btn.dataset.index))
+        );
+      }
+
+      function goTo(index) {
+        current = (index + testimonials.length) % testimonials.length;
+        render();
+      }
+
+      document.getElementById('prev-btn').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('next-btn').addEventListener('click', () => goTo(current + 1));
+
+      render();
+    </script>
+
+  </body>
+</html>
